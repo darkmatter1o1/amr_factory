@@ -1,0 +1,8 @@
+timestamp,event_type,session_start,round_number,round_start_time,round_end_time,round_duration_sec,round_distance_m,battery_start_pct,battery_end_pct,battery_drain_pct,total_distance_m,session_uptime_sec,cancel_reason,snapshot_path,notes
+2026-04-08 10:13:18,SESSION_START,20260408_101317,,20260408_101317,,,,,,,0.000,0.2,,,Robot powered on. Log: /home/jetson/amr_logs/session_20260408_101317.csv
+2026-04-08 10:13:48,STATUS_HEARTBEAT,20260408_101317,,,,,,,10.8,0.00,0.000,30.2,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.00%
+2026-04-08 10:14:18,STATUS_HEARTBEAT,20260408_101317,,,,,,,10.8,0.00,0.000,60.2,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.00%
+2026-04-08 10:14:48,STATUS_HEARTBEAT,20260408_101317,,,,,,,10.7,0.10,0.000,90.2,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.10%
+2026-04-08 10:15:18,STATUS_HEARTBEAT,20260408_101317,,,,,,,10.7,0.10,0.000,120.2,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.10%
+2026-04-08 10:15:48,STATUS_HEARTBEAT,20260408_101317,,,,,,,10.6,0.20,0.000,150.2,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.20%
+2026-04-08 10:16:15,SESSION_END,20260408_101317,,,,,,,10.6,0.20,0.000,177.8,,,Total rounds: 0  |  Total distance: 0.00 m  |  Session battery drain: 0.20%

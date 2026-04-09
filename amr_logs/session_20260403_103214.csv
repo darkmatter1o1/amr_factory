@@ -1,0 +1,28 @@
+timestamp,event_type,session_start,round_number,round_start_time,round_end_time,round_duration_sec,round_distance_m,battery_start_pct,battery_end_pct,battery_drain_pct,total_distance_m,session_uptime_sec,cancel_reason,snapshot_path,notes
+2026-04-03 10:32:14,SESSION_START,20260403_103214,,20260403_103214,,,,,,,0.000,0.2,,,Robot powered on. Log: /home/jetson/amr_logs/session_20260403_103214.csv
+2026-04-03 10:32:32,NAV_STARTED,20260403_103214,1,2026-04-03 10:32:32,,,,13.9,13.9,,0.000,18.8,,,
+2026-04-03 10:32:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.9,0.10,0.000,30.2,,,Rounds completed: 1  |  Active goals: 1  |  Session drain: 0.10%
+2026-04-03 10:33:09,NAV_ABORTED,20260403_103214,1,2026-04-03 10:32:32,2026-04-03 10:33:09,36.9,0.000,13.9,13.9,0.00,0.000,55.7,Navigation aborted — planner / controller failure,/home/jetson/amr_logs/snapshots/snap_ABORTED_R001_20260403_103309_BAT14pct_D0.0m.jpg,
+2026-04-03 10:33:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.9,0.10,0.000,60.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.10%
+2026-04-03 10:33:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.8,0.20,0.000,90.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.20%
+2026-04-03 10:34:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.8,0.20,0.000,120.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.20%
+2026-04-03 10:34:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.8,0.20,0.000,150.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.20%
+2026-04-03 10:35:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.7,0.30,0.000,180.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.30%
+2026-04-03 10:35:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.7,0.30,0.000,210.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.30%
+2026-04-03 10:36:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.6,0.40,0.000,240.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.40%
+2026-04-03 10:36:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.6,0.40,0.000,270.2,,,Rounds completed: 1  |  Active goals: 0  |  Session drain: 0.40%
+2026-04-03 10:36:59,NAV_STARTED,20260403_103214,2,2026-04-03 10:36:59,,,,13.6,13.6,,0.000,285.8,,,
+2026-04-03 10:37:12,NAV_COMPLETED,20260403_103214,2,2026-04-03 10:36:59,2026-04-03 10:37:12,12.6,0.000,13.6,13.6,0.00,0.000,298.4,,,
+2026-04-03 10:37:12,NAV_STARTED,20260403_103214,3,2026-04-03 10:37:12,,,,13.6,13.6,,0.000,298.7,,,
+2026-04-03 10:37:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.6,0.40,0.000,300.2,,,Rounds completed: 3  |  Active goals: 1  |  Session drain: 0.40%
+2026-04-03 10:37:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.5,0.50,0.000,330.2,,,Rounds completed: 3  |  Active goals: 1  |  Session drain: 0.50%
+2026-04-03 10:38:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.4,0.60,0.000,360.2,,,Rounds completed: 3  |  Active goals: 1  |  Session drain: 0.60%
+2026-04-03 10:38:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.3,0.70,0.000,390.2,,,Rounds completed: 3  |  Active goals: 1  |  Session drain: 0.70%
+2026-04-03 10:38:59,NAV_COMPLETED,20260403_103214,3,2026-04-03 10:37:12,2026-04-03 10:38:59,107.1,0.000,13.6,13.3,0.30,0.000,405.8,,,
+2026-04-03 10:39:00,NAV_STARTED,20260403_103214,4,2026-04-03 10:39:00,,,,13.3,13.3,,0.000,406.1,,,
+2026-04-03 10:39:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.3,0.70,0.000,420.2,,,Rounds completed: 4  |  Active goals: 1  |  Session drain: 0.70%
+2026-04-03 10:39:27,NAV_COMPLETED,20260403_103214,4,2026-04-03 10:39:00,2026-04-03 10:39:27,26.9,0.000,13.3,13.2,0.10,0.000,433.0,,,
+2026-04-03 10:39:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.2,0.80,0.000,450.2,,,Rounds completed: 4  |  Active goals: 0  |  Session drain: 0.80%
+2026-04-03 10:40:14,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.2,0.80,0.000,480.2,,,Rounds completed: 4  |  Active goals: 0  |  Session drain: 0.80%
+2026-04-03 10:40:44,STATUS_HEARTBEAT,20260403_103214,,,,,,,13.1,0.90,0.000,510.2,,,Rounds completed: 4  |  Active goals: 0  |  Session drain: 0.90%
+2026-04-03 10:40:56,SESSION_END,20260403_103214,,,,,,,13.1,0.90,0.000,522.3,,,Total rounds: 4  |  Total distance: 0.00 m  |  Session battery drain: 0.90%

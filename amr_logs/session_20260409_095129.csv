@@ -1,0 +1,53 @@
+timestamp,event_type,session_start,round_number,round_start_time,round_end_time,round_duration_sec,round_distance_m,battery_start_pct,battery_end_pct,battery_drain_pct,total_distance_m,session_uptime_sec,cancel_reason,snapshot_path,notes
+2026-04-09 09:51:29,SESSION_START,20260409_095129,,20260409_095129,,,,,,,0.000,0.4,,,Robot powered on. Log: /home/jetson/amr_logs/session_20260409_095129.csv
+2026-04-09 09:51:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.6,0.00,0.000,30.4,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.00%
+2026-04-09 09:52:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.5,0.10,0.000,60.4,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.10%
+2026-04-09 09:52:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.5,0.10,0.000,90.4,,,Rounds completed: 0  |  Active goals: 0  |  Session drain: 0.10%
+2026-04-09 09:53:09,NAV_STARTED,20260409_095129,1,2026-04-09 09:53:09,,,,58.5,58.5,,0.000,100.3,,,
+2026-04-09 09:53:23,NAV_STARTED,20260409_095129,2,2026-04-09 09:53:23,,,,58.5,58.5,,0.000,113.8,,,
+2026-04-09 09:53:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.5,0.10,0.000,120.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.10%
+2026-04-09 09:53:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.4,0.20,0.000,150.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.20%
+2026-04-09 09:54:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.4,0.20,0.000,180.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.20%
+2026-04-09 09:54:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.4,0.20,0.000,210.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.20%
+2026-04-09 09:55:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.3,0.30,0.000,240.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.30%
+2026-04-09 09:55:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.3,0.30,0.000,270.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.30%
+2026-04-09 09:56:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.2,0.40,0.000,300.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.40%
+2026-04-09 09:56:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.2,0.40,0.000,330.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.40%
+2026-04-09 09:57:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.2,0.40,0.000,360.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.40%
+2026-04-09 09:57:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.2,0.40,0.000,390.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.40%
+2026-04-09 09:58:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.2,0.40,0.000,420.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.40%
+2026-04-09 09:58:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.1,0.50,0.000,450.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.50%
+2026-04-09 09:59:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.1,0.50,0.000,480.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.50%
+2026-04-09 09:59:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.1,0.50,0.000,510.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.50%
+2026-04-09 10:00:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.1,0.50,0.000,540.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.50%
+2026-04-09 10:00:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.1,0.50,0.000,570.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.50%
+2026-04-09 10:01:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.0,0.60,0.000,600.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.60%
+2026-04-09 10:01:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.0,0.60,0.000,630.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.60%
+2026-04-09 10:02:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.0,0.60,0.000,660.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.60%
+2026-04-09 10:02:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,58.0,0.60,0.000,690.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.60%
+2026-04-09 10:03:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.9,0.70,0.000,720.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.70%
+2026-04-09 10:03:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.9,0.70,0.000,750.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.70%
+2026-04-09 10:04:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.9,0.70,0.000,780.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.70%
+2026-04-09 10:04:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.9,0.70,0.000,810.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.70%
+2026-04-09 10:05:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.9,0.70,0.000,840.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.70%
+2026-04-09 10:05:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.8,0.80,0.000,870.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.80%
+2026-04-09 10:06:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.8,0.80,0.000,900.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.80%
+2026-04-09 10:06:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.8,0.80,0.000,930.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.80%
+2026-04-09 10:07:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.8,0.80,0.000,960.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.80%
+2026-04-09 10:07:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.7,0.90,0.000,990.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.90%
+2026-04-09 10:08:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.7,0.90,0.000,1020.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.90%
+2026-04-09 10:08:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.7,0.90,0.000,1050.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.90%
+2026-04-09 10:09:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.7,0.90,0.000,1080.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 0.90%
+2026-04-09 10:09:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.6,1.00,0.000,1110.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.00%
+2026-04-09 10:10:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.6,1.00,0.000,1140.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.00%
+2026-04-09 10:10:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.6,1.00,0.000,1170.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.00%
+2026-04-09 10:11:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.6,1.00,0.000,1200.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.00%
+2026-04-09 10:11:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.6,1.00,0.000,1230.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.00%
+2026-04-09 10:12:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.5,1.10,0.000,1260.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.10%
+2026-04-09 10:12:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.5,1.10,0.000,1290.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.10%
+2026-04-09 10:13:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.5,1.10,0.000,1320.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.10%
+2026-04-09 10:13:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.5,1.10,0.000,1350.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.10%
+2026-04-09 10:14:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.5,1.10,0.000,1380.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.10%
+2026-04-09 10:14:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.4,1.20,0.000,1410.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.20%
+2026-04-09 10:15:29,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.4,1.20,0.000,1440.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.20%
+2026-04-09 10:15:59,STATUS_HEARTBEAT,20260409_095129,,,,,,,57.4,1.20,0.000,1470.4,,,Rounds completed: 2  |  Active goals: 2  |  Session drain: 1.20%
