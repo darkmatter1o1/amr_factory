@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Creator Backdoor // ADMIN</title>
+    <meta name="viewport" content="width=1024, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hacker-green: #0f0;
+            --hacker-dark: #001100;
+            --hacker-cyan: #0ff;
+            --hacker-warn: #ff0;
+            --hacker-alert: #f00;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: var(--hacker-green);
+            font-family: 'Share Tech Mono', monospace;
+            width: 1024px;
+            height: 600px;
+            overflow: hidden;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        canvas#matrix {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.15;
+        }
+
+        .overlay-scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .content {
+            position: relative;
+            z-index: 5;
+            padding: 10px 20px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            box-sizing: border-box;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+            border-bottom: 2px dashed var(--hacker-green);
+            padding-bottom: 10px;
+            animation: glitch 2s infinite alternate;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 2px 0 var(--hacker-cyan), -2px 0 red;
+            }
+
+            20% {
+                text-shadow: -2px 0 var(--hacker-cyan), 2px 0 red;
+            }
+
+            40% {
+                text-shadow: 2px 0 var(--hacker-cyan), -2px 0 red;
+            }
+
+            60% {
+                text-shadow: -2px 0 var(--hacker-cyan), 2px 0 red;
+            }
+
+            80% {
+                text-shadow: 2px 0 var(--hacker-cyan), -2px 0 red;
+            }
+
+            100% {
+                text-shadow: -2px 0 var(--hacker-cyan), 2px 0 red;
+            }
+        }
+
+        .welcome-text {
+            font-size: 28px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            margin: 0;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px var(--hacker-green), 0 0 20px var(--hacker-green);
+        }
+
+        .sub-text {
+            font-size: 12px;
+            color: var(--hacker-cyan);
+            margin-top: 5px;
+            text-shadow: 0 0 5px var(--hacker-cyan);
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 15px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .panel {
+            background: rgba(0, 17, 0, 0.7);
+            border: 1px solid var(--hacker-green);
+            padding: 10px;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2) inset;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel::before,
+        .panel::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+        }
+
+        .panel::before {
+            top: 0;
+            left: 0;
+            border-top: 2px solid var(--hacker-green);
+            border-left: 2px solid var(--hacker-green);
+        }
+
+        .panel::after {
+            bottom: 0;
+            right: 0;
+            border-bottom: 2px solid var(--hacker-green);
+            border-right: 2px solid var(--hacker-green);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 14px;
+            color: var(--hacker-cyan);
+            border-bottom: 1px solid var(--hacker-green);
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            background: rgba(0, 17, 0, 0.9);
+            z-index: 2;
+        }
+
+        .scrollable {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Custom scrollbars */
+        .scrollable::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable::-webkit-scrollbar-track {
+            background: var(--hacker-dark);
+            border-left: 1px solid var(--hacker-green);
+        }
+
+        .scrollable::-webkit-scrollbar-thumb {
+            background: var(--hacker-green);
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .data-label {
+            color: #88ff88;
+        }
+
+        .data-value {
+            font-weight: bold;
+            text-shadow: 0 0 3px var(--hacker-green);
+        }
+
+        .status-ok {
+            color: var(--hacker-green);
+            text-shadow: 0 0 5px var(--hacker-green);
+        }
+
+        .status-err {
+            color: var(--hacker-alert);
+            text-shadow: 0 0 5px var(--hacker-alert);
+            animation: blink 1s infinite;
+        }
+
+        .status-warn {
+            color: var(--hacker-warn);
+            text-shadow: 0 0 5px var(--hacker-warn);
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .btn-exit {
+            background: transparent;
+            border: 1px dashed var(--hacker-green);
+            color: var(--hacker-green);
+            font-family: inherit;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            z-index: 20;
+        }
+
+        .btn-exit:hover {
+            background: var(--hacker-green);
+            color: #000;
+            box-shadow: 0 0 15px var(--hacker-green);
+        }
+
+        .log-line {
+            line-height: 1.2;
+            font-size: 10px;
+            margin: 2px 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* ROS Topics styling */
+        .topic-item {
+            margin-bottom: 8px;
+            border-bottom: 1px dashed rgba(0, 255, 0, 0.3);
+            padding-bottom: 4px;
+        }
+
+        .topic-name {
+            color: var(--hacker-cyan);
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .topic-type {
+            color: #ccc;
+            font-size: 10px;
+            display: block;
+            margin-left: 10px;
+        }
+
+        /* Path Coordinates grid */
+        .coord-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            font-size: 10px;
+            gap: 2px;
+        }
+
+        .coord {
+            color: #88ff88;
+        }
+
+        .huge-status {
+            font-size: 32px;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix"></canvas>
+    <div class="overlay-scanlines"></div>
+
+    <div class="content">
+        <header>
+            <div>
+                <div class="welcome-text">WELCOME AVINASH</div>
+                <div class="sub-text">ROOT ACCESS // SYSTEM OVERRIDE ACTIVE</div>
+            </div>
+            <div>
+                <button class="btn-exit"
+                    style="margin-right: 10px; color: var(--hacker-warn); border-color: var(--hacker-warn);"
+                    onclick="if(confirm('INITIATE SHUTDOWN?')) fetch('/shutdown', {method:'POST'})">[ SYSTEM SHUTDOWN
+                    ]</button>
+                <button class="btn-exit" onclick="window.location.href='/'">[ RETURN TO NORMAL ]</button>
+            </div>
+        </header>
+
+        <div class="dashboard">
+            <!-- All ROS Topics (Span 1 column, 2 rows) -->
+            <div class="panel" style="grid-row: span 2;">
+                <h2>> GLOBAL SENSOR NET (ALL TOPICS)</h2>
+                <div class="scrollable" id="all-topics-container">Loading Network Graph...</div>
+            </div>
+
+            <!-- Health & State -->
+            <div class="panel">
+                <h2>> CORE SYSTEM STATE</h2>
+                <div class="data-row">
+                    <span class="data-label">Emergency Protocol:</span>
+                    <span class="data-value" id="sys-emergency">--</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Nav Health:</span>
+                    <span class="data-value" id="sys-nav">--</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Robot Core:</span>
+                    <span class="data-value" id="sys-robot">--</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Lidar/Vision:</span>
+                    <span class="data-value" id="sys-lidar">--</span>
+                </div>
+                <div id="big-alert" class="huge-status status-ok">SYSTEM SECURE</div>
+            </div>
+
+            <!-- Power Core -->
+            <div class="panel">
+                <h2>> POWER Core</h2>
+                <div class="data-row">
+                    <span class="data-label">V_BATT:</span>
+                    <span class="data-value" id="bat-val">--%</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">CELL ESTIMATE:</span>
+                    <span class="data-value" id="bat-volt">-- V</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">DRAW:</span>
+                    <span class="data-value">0.7A (STBY)</span>
+                </div>
+
+                <h2 style="margin-top:10px;">> KINEMATICS</h2>
+                <div class="data-row">
+                    <span class="data-label">Pos X:</span>
+                    <span class="data-value" id="pose-x">--</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Pos Y:</span>
+                    <span class="data-value" id="pose-y">--</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Yaw Base:</span>
+                    <span class="data-value" id="pose-yaw">--</span>
+                </div>
+            </div>
+
+            <!-- Live Robot Path -->
+            <div class="panel">
+                <h2>> TRAJECTORY DATA SHADOW</h2>
+                <div class="scrollable coord-grid" id="path-container">Loading Stream...</div>
+            </div>
+
+            <!-- System Logs -->
+            <div class="panel" style="background: rgba(17, 0, 0, 0.6); border-color: var(--hacker-warn);">
+                <h2 style="color: var(--hacker-warn); border-color: var(--hacker-warn);">> INTRUSION & DEBUG LOG</h2>
+                <div class="scrollable" id="log-panel" style="display: flex; flex-direction: column-reverse;">
+                    <!-- Logs will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix Rain Background
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = '0123456789ABCDEF!@#$%^&*()_+:<>?'.split('');
+        const fontSize = 12;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        for (let x = 0; x < columns; x++) drops[x] = 1;
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 33);
+
+        const BASE_URL = window.location.origin;
+
+        function hackLog(msg) {
+            const panel = document.getElementById('log-panel');
+            const time = new Date().toISOString().split('T')[1].slice(0, -1);
+            const line = document.createElement('div');
+            line.className = 'log-line';
+            line.innerHTML = `<span style="color:var(--hacker-warn)">[${time}]</span> ${msg}`;
+            panel.prepend(line);
+            if (panel.children.length > 50) panel.lastChild.remove();
+        }
+
+        // Fetch Every Topic!
+        function fetchAllTopics() {
+            fetch(`${BASE_URL}/all_topics`)
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById('all-topics-container');
+                    if (data.length === 0) {
+                        hackLog("WARN: ZERO TOPICS ON ROSBUS");
+                        return;
+                    }
+                    container.innerHTML = '';
+                    data.sort((a, b) => a.name.localeCompare(b.name)).forEach(topic => {
+                        const div = document.createElement('div');
+                        div.className = 'topic-item';
+                        div.innerHTML = `<div class="topic-name">${topic.name}</div>
+                                         <div class="topic-type">[${topic.types.join(", ")}]</div>`;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(err => hackLog(`TOPIC GRAPH FETCH ERR: ${err}`));
+        }
+
+        function updateBattery() {
+            fetch(`${BASE_URL}/battery`)
+                .then(res => res.json())
+                .then(data => {
+                    const lvl = data.battery_level;
+                    document.getElementById('bat-val').innerText = `${lvl}%`;
+                    document.getElementById('bat-volt').innerText = `${(10 + (lvl / 100) * 2.6).toFixed(2)} V`;
+                })
+                .catch(err => hackLog(`BATTERY COMMS FAIL: ${err.message}`));
+        }
+
+        function updateCoreHealth() {
+            fetch(`${BASE_URL}/topic_health`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('sys-nav').className = data.navigation ? 'data-value status-ok' : 'data-value status-err';
+                    document.getElementById('sys-nav').innerText = data.navigation ? 'ONLINE' : 'FATAL';
+
+                    document.getElementById('sys-robot').className = data.robot ? 'data-value status-ok' : 'data-value status-err';
+                    document.getElementById('sys-robot').innerText = data.robot ? 'SYNCED' : 'FATAL';
+
+                    document.getElementById('sys-lidar').className = data.lidar ? 'data-value status-ok' : 'data-value status-err';
+                    document.getElementById('sys-lidar').innerText = data.lidar ? 'ACTIVE' : 'BLIND';
+                })
+                .catch(err => { });
+
+            fetch(`${BASE_URL}/system_state`)
+                .then(res => res.json())
+                .then(data => {
+                    const emg = document.getElementById('sys-emergency');
+                    const bigAlert = document.getElementById('big-alert');
+                    if (data.emergency_active) {
+                        emg.className = 'data-value status-err';
+                        emg.innerText = 'TRIGGERED';
+                        bigAlert.className = 'huge-status status-err';
+                        bigAlert.innerText = 'EMERGENCY OVERRIDE';
+                    } else {
+                        emg.className = 'data-value status-ok';
+                        emg.innerText = 'DORMANT';
+                        bigAlert.className = 'huge-status status-ok';
+                        bigAlert.innerText = 'SYSTEM SECURE';
+                    }
+                })
+                .catch(err => { });
+        }
+
+        function updatePoseAndPath() {
+            fetch(`${BASE_URL}/robot_position`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('pose-x').innerText = data.x.toFixed(4);
+                    document.getElementById('pose-y').innerText = data.y.toFixed(4);
+                    document.getElementById('pose-yaw').innerText = data.yaw_deg !== undefined ? data.yaw_deg.toFixed(3) + '°' : '--';
+                })
+                .catch();
+
+            fetch(`${BASE_URL}/robot_path`)
+                .then(res => res.json())
+                .then(data => {
+                    const container = document.getElementById('path-container');
+                    container.innerHTML = '';
+                    // Limit to last 50 points to save DOM
+                    const pts = data.slice(-50).reverse();
+                    pts.forEach((pt, i) => {
+                        const div1 = document.createElement('div');
+                        div1.className = 'coord';
+                        div1.innerText = `X:${pt.x.toFixed(2)}`;
+                        const div2 = document.createElement('div');
+                        div2.className = 'coord';
+                        div2.innerText = `Y:${pt.y.toFixed(2)}`;
+                        if (i === 0) { div1.style.color = '#fff'; div2.style.color = '#fff'; }
+                        container.appendChild(div1);
+                        container.appendChild(div2);
+                    });
+                })
+                .catch();
+        }
+
+        // Init
+        hackLog("INIT ROOT OVERRIDE v2.0(MAX_DENSITY)");
+        hackLog("BYPASSING SECURITY PROTOCOLS... OK");
+        hackLog("POLLING CYCLONE DDS SHADOW NETWORK...");
+        setTimeout(() => hackLog("ACCESS GRANTED - WELCOME CREATR AVINASH"), 1000);
+
+        setInterval(updateBattery, 2000);
+        setInterval(updateCoreHealth, 1000);
+        setInterval(updatePoseAndPath, 500);
+
+        // Fetch topics immediately and then refresh every 10 seconds
+        fetchAllTopics();
+        setInterval(fetchAllTopics, 10000);
+
+        // Add random cool logs
+        setInterval(() => {
+            const logs = [
+                "Decrypting node graph...",
+                "Running heuristic analysis on Lidar cloud...",
+                "Bypassing safe mode constraints...",
+                "Scraping Nav2 configuration parameters...",
+                "Injecting false transforms into TF tree...",
+                "Shadowing shared memory block (PID:4023)...",
+                "OVERCLOCKING CPU THREADS [WARNING]"
+            ];
+            hackLog(logs[Math.floor(Math.random() * logs.length)]);
+        }, 3000);
+    </script>
+</body>
+
+</html>

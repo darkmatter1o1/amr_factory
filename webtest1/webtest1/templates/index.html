@@ -1,0 +1,1682 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Autonomous Mobile Robot v3</title>
+    <meta name="viewport" content="width=1024, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            /* Slate 900 */
+            --panel-bg: #1e293b;
+            /* Slate 800 */
+            --text-main: #f8fafc;
+            /* Slate 50 */
+            --text-muted: #94a3b8;
+            /* Slate 400 */
+            --accent-blue: #3b82f6;
+            /* Blue 500 */
+            --accent-blue-hover: #2563eb;
+            /* Blue 600 */
+            --accent-green: #10b981;
+            /* Emerald 500 */
+            --accent-green-hover: #059669;
+            /* Emerald 600 */
+            --accent-red: #ef4444;
+            /* Red 500 */
+            --accent-red-hover: #dc2626;
+            /* Red 600 */
+            --accent-orange: #f59e0b;
+            /* Amber 500 */
+            --accent-orange-hover: #d97706;
+            /* Amber 600 */
+            --border-color: #334155;
+            /* Slate 700 */
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            width: 1024px;
+            height: 600px;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            user-select: none;
+            /* Prevent text selection on touch panels */
+        }
+
+        header {
+            background: linear-gradient(90deg, #1e293b 0%, #0f172a 50%, #1e293b 100%);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--accent-blue);
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+
+        .header-status {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        main {
+            display: flex;
+            height: calc(100% - 46px);
+            /* 600 - header height */
+            padding: 12px;
+            box-sizing: border-box;
+            gap: 12px;
+            overflow: hidden;
+        }
+
+        section {
+            background-color: var(--panel-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+
+        .left-panel {
+            flex: 1;
+            max-width: 250px;
+        }
+
+        .center-panel {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .right-panel {
+            flex: 1;
+            max-width: 250px;
+        }
+
+        h3 {
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            width: 100%;
+        }
+
+        /* Battery Styles */
+        .battery-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .battery-icon {
+            font-size: 24px;
+        }
+
+        .battery-container {
+            flex-grow: 1;
+            background: #0f172a;
+            border-radius: 6px;
+            overflow: hidden;
+            height: 24px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .battery-level {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            text-align: center;
+            color: #fff;
+            line-height: 24px;
+            transition: width 0.5s ease, background-color 0.5s ease;
+            font-size: 12px;
+            font-weight: 700;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Buttons Base */
+        button {
+            font-family: 'Inter', sans-serif;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:active {
+            transform: scale(0.96);
+        }
+
+        /* Goal Selector */
+        .goal-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        .goal-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 14px;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
+        }
+
+        .goal-btn:hover {
+            background-color: var(--accent-blue);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .home-button {
+            background-color: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 14px;
+            font-size: 16px;
+            margin-top: auto;
+        }
+
+        .home-button:hover {
+            background-color: var(--accent-green);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .cancel-goal-btn {
+            background-color: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--accent-orange);
+            color: var(--accent-orange);
+            padding: 14px;
+            font-size: 16px;
+            margin-top: 0px;
+            width: 100%;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .cancel-goal-btn:hover {
+            background-color: var(--accent-orange);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Map Container */
+        .map-wrapper {
+            position: relative;
+            background: #0f172a;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+            width: 480px;
+            height: 320px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+            margin-top: 10px;
+        }
+
+        #webgl-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Joystick Controls */
+        .joystick-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            height: 180px;
+            margin-bottom: 20px;
+        }
+
+        .joy-btn {
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 20px;
+            border-radius: 8px;
+        }
+
+        .joy-btn:hover {
+            background-color: var(--border-color);
+        }
+
+        .joy-up {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .joy-left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        .joy-stop {
+            grid-column: 2;
+            grid-row: 2;
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: var(--accent-red);
+            color: var(--accent-red);
+        }
+
+        .joy-stop:hover {
+            background-color: var(--accent-red);
+            color: #fff;
+        }
+
+        .joy-right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .joy-down {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        /* Logs */
+        .log-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .log-box {
+            flex-grow: 1;
+            background: #000;
+            color: #22c55e;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 11px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            overflow-y: auto;
+            line-height: 1.4;
+        }
+
+        /* Checklist / Status indicators in Header */
+        .status-pill {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--text-muted);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .status-dot.ok {
+            background-color: var(--accent-green);
+            box-shadow: 0 0 8px var(--accent-green);
+        }
+
+        .status-dot.not-ok {
+            background-color: var(--accent-red);
+            box-shadow: 0 0 8px var(--accent-red);
+            animation: pulse-red 1s infinite alternate;
+        }
+
+        /* Fixed Buttons */
+        .bottom-actions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bottom-actions-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            color: white;
+            white-space: nowrap;
+        }
+
+        .emergency-btn {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            border: 2px solid #fca5a5;
+            flex: 2;
+        }
+
+        .emergency-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+        }
+
+        .restart-btn {
+            background: linear-gradient(135deg, #f59e0b, #b45309);
+            border: 2px solid #fcd34d;
+        }
+
+        .restart-btn:hover {
+            background: linear-gradient(135deg, #d97706, #92400e);
+        }
+
+        .shutdown-btn {
+            background: linear-gradient(135deg, #6b7280, #374151);
+            border: 2px solid #9ca3af;
+        }
+
+        .shutdown-btn:hover {
+            background: linear-gradient(135deg, #4b5563, #1f2937);
+        }
+
+        /* PIN Modal */
+        .pin-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1024px;
+            height: 600px;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .pin-content {
+            background-color: var(--panel-bg);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 320px;
+            position: relative;
+        }
+
+        .pin-content h2 {
+            margin-top: 0;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            color: var(--text-main);
+            margin-bottom: 20px;
+        }
+
+        .pin-content input {
+            background: #0f172a;
+            color: var(--accent-blue);
+            font-size: 28px;
+            padding: 12px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            letter-spacing: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .keypad button {
+            padding: 18px;
+            font-size: 20px;
+            border-radius: 12px;
+            background-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .keypad button:hover {
+            background-color: var(--accent-blue);
+        }
+
+        .keypad .key-clear {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        .keypad .key-ok {
+            background-color: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            width: auto;
+            padding: 5px;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-red);
+            transform: scale(1.1);
+        }
+
+        /* Battery Alert Fullscreen */
+        #batteryAlert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1024px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .battery-alert-content {
+            background: linear-gradient(135deg, var(--bg-color), var(--panel-bg));
+            border: 2px solid var(--accent-red);
+            color: white;
+            padding: 40px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+            width: 400px;
+        }
+
+        #alert-header {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            margin-top: 0;
+            color: var(--accent-red);
+        }
+
+        #alert-text {
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+
+        .loading-bar-container {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-top: 25px;
+            height: 12px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .loading-bar-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), #34d399);
+            border-radius: 8px;
+        }
+
+        .animate-loading-bar {
+            animation: fill-bar 5s linear forwards;
+        }
+
+        @keyframes fill-bar {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes pulse-red {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+
+
+        /* Startup Overlay */
+        #startupOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1024px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(2px);
+            z-index: 100000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease;
+        }
+
+        .startup-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 48px;
+            color: var(--accent-blue);
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+            margin-bottom: 20px;
+            animation: pulse-blue 2s infinite;
+        }
+
+        .startup-text {
+            font-size: 16px;
+            color: var(--accent-green);
+            margin-bottom: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            height: 20px;
+        }
+
+        @keyframes pulse-blue {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* AMR Rules Ticker */
+        .rule-box {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px dashed var(--accent-orange);
+            color: var(--accent-orange);
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-align: center;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        /* ===== JOYSTICK OVERRIDE POPUP ===== */
+        #joystickOverridePopup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1024px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 90000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(12px);
+        }
+
+        .override-content {
+            text-align: center;
+            padding: 50px;
+            border-radius: 20px;
+            border: 3px solid #f59e0b;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 0 0 60px rgba(245, 158, 11, 0.3), inset 0 0 30px rgba(245, 158, 11, 0.05);
+            width: 520px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .override-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: repeating-linear-gradient(90deg, #f59e0b 0px, #f59e0b 20px, #000 20px, #000 40px);
+            animation: stripe-scroll 1s linear infinite;
+        }
+
+        .override-content::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: repeating-linear-gradient(90deg, #f59e0b 0px, #f59e0b 20px, #000 20px, #000 40px);
+            animation: stripe-scroll 1s linear infinite reverse;
+        }
+
+        @keyframes stripe-scroll {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 40px 0;
+            }
+        }
+
+        .override-icon {
+            font-size: 72px;
+            animation: pulse-warning 1.5s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes pulse-warning {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 0.7;
+            }
+        }
+
+        .override-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 28px;
+            color: #f59e0b;
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+            margin: 10px 0;
+            letter-spacing: 3px;
+        }
+
+        .override-text {
+            font-size: 18px;
+            color: #fbbf24;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        /* ===== OBSTACLE POPUP ===== */
+        #obstaclePopup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 1024px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 89000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(12px);
+        }
+
+        .obstacle-content {
+            text-align: center;
+            padding: 50px;
+            border-radius: 20px;
+            width: 540px;
+            position: relative;
+            transition: all 0.5s ease;
+        }
+
+        /* Obstacle warning state */
+        .obstacle-content.warning-state {
+            border: 3px solid #ef4444;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b1b 100%);
+            box-shadow: 0 0 60px rgba(239, 68, 68, 0.3), inset 0 0 30px rgba(239, 68, 68, 0.05);
+        }
+
+        /* Robot lost state */
+        .obstacle-content.lost-state {
+            border: 3px solid #8b5cf6;
+            background: linear-gradient(135deg, #1a1a2e 0%, #1e1b2d 100%);
+            box-shadow: 0 0 60px rgba(139, 92, 246, 0.3), inset 0 0 30px rgba(139, 92, 246, 0.05);
+        }
+
+        .obstacle-icon {
+            font-size: 72px;
+            animation: obstacle-bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes obstacle-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .obstacle-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 26px;
+            margin: 15px 0;
+            letter-spacing: 2px;
+        }
+
+        .obstacle-text {
+            font-size: 18px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .obstacle-timer {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #94a3b8;
+            margin-top: 15px;
+        }
+
+        /* Dizzy robot animation */
+        .dizzy-robot {
+            font-size: 100px;
+            display: inline-block;
+            animation: dizzy-spin 2s ease-in-out infinite;
+        }
+
+        @keyframes dizzy-spin {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            15% {
+                transform: rotate(15deg) scale(1.05);
+            }
+
+            30% {
+                transform: rotate(-12deg) scale(0.95);
+            }
+
+            45% {
+                transform: rotate(10deg) scale(1.08);
+            }
+
+            60% {
+                transform: rotate(-8deg) scale(0.98);
+            }
+
+            75% {
+                transform: rotate(5deg) scale(1.03);
+            }
+
+            100% {
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        .dizzy-stars {
+            font-size: 28px;
+            animation: orbit-stars 3s linear infinite;
+            display: inline-block;
+            position: relative;
+            top: -40px;
+        }
+
+        @keyframes orbit-stars {
+            0% {
+                transform: rotate(0deg) translateX(50px) rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg) translateX(50px) rotate(-360deg);
+            }
+        }
+
+        .lost-title {
+            color: #8b5cf6;
+            text-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+            animation: lost-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes lost-pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                text-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+            }
+
+            50% {
+                opacity: 0.6;
+                text-shadow: 0 0 40px rgba(139, 92, 246, 0.9);
+            }
+        }
+
+        .lost-text {
+            color: #a78bfa;
+        }
+
+        .lost-restart-btn {
+            margin-top: 25px;
+            padding: 16px 40px;
+            font-size: 16px;
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            border: 2px solid #a78bfa;
+            color: white;
+            border-radius: 12px;
+            cursor: pointer;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .lost-restart-btn:hover {
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="startupOverlay">
+        <div class="startup-logo">AMR SYSTEM BOOT</div>
+        <div class="startup-text" id="startupText">Initializing systems...</div>
+    </div>
+
+    <header>
+        <div class="header-title" onclick="handleTitleClick()" style="cursor: pointer;">AMR Dashboard</div>
+        <div class="header-status">
+            <div class="status-pill">Robot <div id="status-robot" class="status-dot"></div>
+            </div>
+            <div class="status-pill">Nav <div id="status-navigation" class="status-dot"></div>
+            </div>
+            <div class="status-pill">Lidar <div id="status-lidar" class="status-dot"></div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- LEFT PANEL: Missions & Battery -->
+        <section class="left-panel">
+            <h3>Power System</h3>
+            <div class="battery-wrapper">
+                <span class="battery-icon">🔋</span>
+                <div class="battery-container">
+                    <div class="battery-level" id="battery-level">0%</div>
+                </div>
+            </div>
+
+            <h3>Mission Control</h3>
+            <div class="goal-selector">
+                <button class="goal-btn" onclick="sendGoal(1)">📍 Navigate to Bay 1</button>
+                <button class="goal-btn" onclick="sendGoal(2)">📍 Navigate to Bay 2</button>
+            </div>
+            <button class="cancel-goal-btn" onclick="cancelGoal()">❌ Cancel Goal</button>
+            <button class="home-button" onclick="sendInitialPose()">🏠 Reset Home Pose</button>
+        </section>
+
+        <!-- CENTER PANEL: Depth View -->
+        <section class="center-panel" style="position: relative;">
+            <h3>Live Depth Vision</h3>
+            <div class="map-wrapper"
+                style="border: 2px solid var(--accent-blue); box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);">
+                <img id="depth-stream" src="/depth_feed"
+                    style="width: 100%; height: 100%; object-fit: cover; background: #000;"
+                    alt="Awaiting Depth Feed..." />
+                <!-- Scanline overlay for futuristic effect -->
+                <div
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; background: linear-gradient(rgba(15, 23, 42, 0) 50%, rgba(15, 23, 42, 0.25) 50%); background-size: 100% 4px;">
+                </div>
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; height: 80%; border: 1px solid rgba(59, 130, 246, 0.3); pointer-events: none; border-radius: 20px;">
+                </div>
+                <div
+                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 10%; height: 10%; border: 1px solid rgba(59, 130, 246, 0.8); pointer-events: none; border-radius: 50%;">
+                </div>
+            </div>
+
+            <div class="bottom-actions">
+                <button class="action-btn emergency-btn" style="font-size: 18px; padding: 20px;"
+                    onclick="emergencyStop()">🛑 EMERGENCY STOP</button>
+                <div class="bottom-actions-row">
+                    <button class="action-btn shutdown-btn" onclick="shutdownSystem()">⏻ Shutdown</button>
+                    <button class="action-btn restart-btn" onclick="restartSystem()">🔄 Restart</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: Manual Control & Logs -->
+        <section class="right-panel">
+            <h3>Manual Override</h3>
+            <div class="joystick-container">
+                <button class="joy-btn joy-up" onclick="checkJoystickAccess('forward')">↑</button>
+                <button class="joy-btn joy-left" onclick="checkJoystickAccess('left')">↺</button>
+                <button class="joy-btn joy-stop" onclick="checkJoystickAccess('stop')">■</button>
+                <button class="joy-btn joy-right" onclick="checkJoystickAccess('right')">↻</button>
+                <button class="joy-btn joy-down" onclick="checkJoystickAccess('backward')">↓</button>
+            </div>
+
+            <h3>⚡ Safety Protocol</h3>
+            <div class="rule-box" id="rule-box">Loading protocols...</div>
+
+            <h3>System Logs</h3>
+            <div class="log-container">
+                <div class="log-box" id="log-box">System Initialized...<br></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- PIN Modal -->
+    <div id="pinModal" style="display: none;" class="pin-modal">
+        <div class="pin-content">
+            <button class="close-btn" onclick="closePinModal()">×</button>
+            <h2>Admin Access</h2>
+            <input type="password" id="pinInput" disabled />
+            <div class="keypad">
+                <button onclick="pressKey('1')">1</button>
+                <button onclick="pressKey('2')">2</button>
+                <button onclick="pressKey('3')">3</button>
+                <button onclick="pressKey('4')">4</button>
+                <button onclick="pressKey('5')">5</button>
+                <button onclick="pressKey('6')">6</button>
+                <button onclick="pressKey('7')">7</button>
+                <button onclick="pressKey('8')">8</button>
+                <button onclick="pressKey('9')">9</button>
+                <button class="key-clear" onclick="pressKey('clear')">C</button>
+                <button onclick="pressKey('0')">0</button>
+                <button class="key-ok" onclick="pressKey('ok')">✔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battery Alert Modal -->
+    <div id="batteryAlert" style="display:none;">
+        <div class="battery-alert-content">
+            <h2 id="alert-header"></h2>
+            <p id="alert-text"></p>
+            <div class="loading-bar-container" id="loading-bar-container">
+                <div class="loading-bar-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Joystick Override Warning Popup -->
+    <div id="joystickOverridePopup">
+        <div class="override-content">
+            <div class="override-icon">⚠️</div>
+            <div class="override-title">MANUAL OVERRIDE ACTIVE</div>
+            <div class="override-text">Please be careful — running on override!<br>All safety measures are bypassed.
+            </div>
+        </div>
+    </div>
+
+    <!-- Obstacle Detection Popup -->
+    <div id="obstaclePopup">
+        <div class="obstacle-content warning-state" id="obstacleContent">
+            <!-- Warning State -->
+            <div id="obstacleWarningState">
+                <div class="obstacle-icon">🚧</div>
+                <div class="obstacle-title" style="color: #ef4444; text-shadow: 0 0 20px rgba(239, 68, 68, 0.6);">
+                    OBSTACLE DETECTED</div>
+                <div class="obstacle-text" style="color: #fca5a5;">Obstacle is in front — please clear the path!</div>
+                <div class="obstacle-timer" id="obstacleTimer"></div>
+            </div>
+            <!-- Lost State -->
+            <div id="obstacleLostState" style="display: none;">
+                <div class="dizzy-robot">🤖</div>
+                <div class="dizzy-stars">💫⭐✨</div>
+                <div class="obstacle-title lost-title">ROBOT IS LOST</div>
+                <div class="obstacle-text lost-text">I've been stuck for too long...<br>Go back to home and restart!
+                </div>
+                <button class="lost-restart-btn" onclick="restartSystem()">🔄 RESTART SYSTEM</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_URL = window.location.origin;
+
+        // Secret backdoor triggers
+        let secretClickCount = 0;
+        let secretClickTimeout = null;
+        let keySequence = "";
+
+        document.addEventListener('keydown', (e) => {
+            keySequence += e.key.toLowerCase();
+            if (keySequence.length > 10) {
+                keySequence = keySequence.slice(-10);
+            }
+            if (keySequence.includes('creator') || keySequence.includes('hacker')) {
+                window.location.href = '/creator_backdoor';
+            }
+        });
+
+        function handleTitleClick() {
+            secretClickCount++;
+            if (secretClickTimeout) clearTimeout(secretClickTimeout);
+
+            if (secretClickCount >= 5) {
+                window.location.href = '/creator_backdoor';
+            } else {
+                secretClickTimeout = setTimeout(() => {
+                    secretClickCount = 0;
+                }, 1000); // Reset after 1 second of inactivity
+            }
+        }
+
+        let joystickUnlocked = false;
+        let currentPin = "";
+        const correctPin = "1234";
+        let initializingMessageTimeout = null;
+
+        let lowBatteryTimeout = null;
+        let lowBatteryInterval = null;
+        let isLowBatteryAlerting = false;
+
+        function showLowBatteryPopup() {
+            isLowBatteryAlerting = true;
+            const alertBox = document.getElementById("batteryAlert");
+            const alertContent = alertBox.querySelector('.battery-alert-content');
+            const alertHeader = document.getElementById("alert-header");
+            const alertText = document.getElementById("alert-text");
+            const loadingBarContainer = document.getElementById("loading-bar-container");
+
+            alertHeader.innerHTML = "⚠️ LOW BATTERY";
+            alertHeader.style.color = "var(--accent-orange)";
+            alertContent.style.borderColor = "var(--accent-orange)";
+            alertContent.style.boxShadow = "0 0 30px rgba(245, 158, 11, 0.5)";
+            alertText.innerHTML = "Battery level < 20%. Ensure docked after the next cycle.";
+            loadingBarContainer.style.display = "none";
+            alertBox.style.display = "flex";
+
+            lowBatteryTimeout = setTimeout(() => {
+                alertBox.style.display = "none";
+                isLowBatteryAlerting = false;
+            }, 5000);
+        }
+
+        function log(msg) {
+            const box = document.getElementById("log-box");
+            const timestamp = new Date().toLocaleTimeString('en-US', { hour12: false, hour: "numeric", minute: "numeric", second: "numeric" });
+            box.innerHTML += `[${timestamp}] ${msg}<br>`;
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function updateBattery() {
+            if (typeof updateBattery.hasShownInitializing === 'undefined') {
+                updateBattery.hasShownInitializing = false;
+            }
+            if (typeof updateBattery.wasCriticalOnce === 'undefined') {
+                updateBattery.wasCriticalOnce = false;
+            }
+
+            fetch(`${BASE_URL}/battery`)
+                .then(res => res.ok ? res.json() : Promise.reject(new Error(`HTTP status ${res.status}`)))
+                .then(data => {
+                    const level = Math.max(0, Math.min(100, data.battery_level || 0));
+                    const bar = document.getElementById("battery-level");
+                    bar.style.width = `${level}%`;
+                    bar.textContent = `${level}%`;
+
+                    if (level > 60) {
+                        bar.style.background = "linear-gradient(90deg, #10b981, #34d399)";
+                    } else if (level > 30) {
+                        bar.style.background = "linear-gradient(90deg, #f59e0b, #fbbf24)";
+                    } else {
+                        bar.style.background = "linear-gradient(90deg, #ef4444, #f87171)";
+                    }
+
+                    const alertBox = document.getElementById("batteryAlert");
+                    const alertContent = alertBox.querySelector('.battery-alert-content');
+                    const alertHeader = document.getElementById("alert-header");
+                    const alertText = document.getElementById("alert-text");
+                    const loadingBarContainer = document.getElementById("loading-bar-container");
+                    const loadingBarProgress = loadingBarContainer.querySelector('.loading-bar-progress');
+
+                    if (level <= 10) updateBattery.hasShownInitializing = false;
+
+                    if (level < 10) {
+                        updateBattery.wasCriticalOnce = true;
+                        if (lowBatteryInterval) { clearInterval(lowBatteryInterval); lowBatteryInterval = null; }
+                        if (lowBatteryTimeout) { clearTimeout(lowBatteryTimeout); lowBatteryTimeout = null; }
+                        isLowBatteryAlerting = false;
+
+                        if (initializingMessageTimeout) {
+                            clearTimeout(initializingMessageTimeout);
+                            initializingMessageTimeout = null;
+                        }
+                        alertHeader.innerHTML = "⚡ Critical Battery";
+                        alertHeader.style.color = "var(--accent-red)";
+                        alertContent.style.borderColor = "var(--accent-red)";
+                        alertContent.style.boxShadow = "0 0 30px rgba(239, 68, 68, 0.4)";
+                        alertText.innerHTML = "System power critically low. Please dock immediately.";
+                        loadingBarContainer.style.display = "none";
+                        loadingBarProgress.classList.remove('animate-loading-bar');
+                        alertBox.style.display = "flex";
+
+                    } else if (level < 20) {
+                        if (initializingMessageTimeout) {
+                            clearTimeout(initializingMessageTimeout);
+                            initializingMessageTimeout = null;
+                        }
+
+                        if (!lowBatteryInterval) {
+                            showLowBatteryPopup();
+                            lowBatteryInterval = setInterval(showLowBatteryPopup, 25000);
+                        }
+
+                        if (!isLowBatteryAlerting) {
+                            alertBox.style.display = "none";
+                        }
+
+                    } else if (level > 40 && !updateBattery.hasShownInitializing && updateBattery.wasCriticalOnce) {
+                        if (lowBatteryInterval) { clearInterval(lowBatteryInterval); lowBatteryInterval = null; }
+                        if (lowBatteryTimeout) { clearTimeout(lowBatteryTimeout); lowBatteryTimeout = null; }
+                        isLowBatteryAlerting = false;
+
+                        updateBattery.hasShownInitializing = true;
+                        alertHeader.innerHTML = "System Initializing";
+                        alertHeader.style.color = "var(--accent-green)";
+                        alertContent.style.borderColor = "var(--accent-green)";
+                        alertContent.style.boxShadow = "0 0 30px rgba(16, 185, 129, 0.4)";
+                        alertText.innerHTML = "Waiting for battery stabilization circuits...";
+                        loadingBarContainer.style.display = "block";
+                        loadingBarProgress.classList.add('animate-loading-bar');
+                        alertBox.style.display = "flex";
+
+                        initializingMessageTimeout = setTimeout(() => {
+                            alertBox.style.display = "none";
+                            loadingBarProgress.classList.remove('animate-loading-bar');
+                            initializingMessageTimeout = null;
+                        }, 60000);
+
+                    } else if (!initializingMessageTimeout && !isLowBatteryAlerting) {
+                        if (lowBatteryInterval) { clearInterval(lowBatteryInterval); lowBatteryInterval = null; }
+                        if (lowBatteryTimeout) { clearTimeout(lowBatteryTimeout); lowBatteryTimeout = null; }
+
+                        alertBox.style.display = "none";
+                        loadingBarProgress.classList.remove('animate-loading-bar');
+                    }
+                })
+                .catch(error => console.log(`Battery fetch failed: ${error.message}`));
+        }
+
+        let hasHomed = false;
+        let homingWarningShown = false;
+        let currentRobotPosition = null;
+
+        function sendGoal(goal) {
+            if (goal === 1 && !hasHomed && !homingWarningShown) {
+                alert("⚠️ WARNING: Robot homing not done! Please press Reset Home Pose before navigating to Bay 1.");
+                homingWarningShown = true;
+                return;
+            }
+
+            if (goal === 1 && currentRobotPosition === 1) {
+                alert("⚠️ WARNING: The robot is already at position 1. Please press 2.");
+                return;
+            }
+
+            log(`Sending nav goal: Bay ${goal}`);
+            fetch(BASE_URL + "/send_goal", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ goal: goal })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    log(`Goal ${data.sent_goal} status: ${data.status}`);
+                    currentRobotPosition = goal;
+                })
+                .catch(error => log(`Send goal failed: ${error.message}`));
+        }
+
+        function emergencyStop() {
+            log(`EMERGENCY STOP TRIGGERED`);
+            fetch(`${BASE_URL}/emergency_stop`, { method: "POST" })
+                .then(res => res.json())
+                .then(resp => {
+                    if (resp.status && resp.status.includes("Emergency activated")) {
+                        alert("🚨 EMERGENCY STOP ACTIVATED\n\nMotors killed. System requires restart.");
+                    } else {
+                        log(resp.status);
+                    }
+                })
+                .catch(err => {
+                    log("Emergency stop failed network request.");
+                });
+        }
+
+        function checkJoystickAccess(direction) {
+            if (!joystickUnlocked) {
+                showPinModal();
+                return;
+            }
+            sendDirection(direction);
+        }
+
+        function sendDirection(dir) {
+            const speed = 0.5;
+            let linear = 0, angular = 0;
+
+            if (dir === "forward") linear = speed;
+            else if (dir === "backward") linear = -speed;
+            else if (dir === "left") angular = speed;
+            else if (dir === "right") angular = -speed;
+            else if (dir === "stop") log("Manual stop issued");
+
+            fetch(BASE_URL + "/send_twist", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ linear: linear, angular: angular })
+            })
+                .then(res => res.json())
+                .then(data => log(`${dir.toUpperCase()} command sent`))
+                .catch(error => log(`Twist failed: ${error.message}`));
+
+            if (dir !== "stop") {
+                setTimeout(() => {
+                    fetch(BASE_URL + "/send_twist", {
+                        method: "POST",
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ linear: 0, angular: 0 })
+                    })
+                        .then(res => res.json())
+                        .catch(error => console.log(error));
+                }, 600);
+            }
+        }
+
+        function sendInitialPose() {
+            const defaultX = 0.0;
+            const defaultY = 0.0;
+            const defaultYaw = 0.0;
+
+            log(`Resetting pose (0,0)`);
+            fetch(`${BASE_URL}/send_initial_pose`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ x: defaultX, y: defaultY, yaw_deg: defaultYaw })
+            })
+                .then(res => res.json())
+                .then(resp => {
+                    if (resp.status === "success") {
+                        hasHomed = true;
+                        currentRobotPosition = null;
+                        log(`Pose reset successful`);
+                    } else {
+                        log(`Failed to reset pose: ${resp.message}`);
+                    }
+                })
+                .catch(err => log("Pose reset network error."));
+        }
+
+        function updateTopicHealth() {
+            fetch(`${BASE_URL}/topic_health`)
+                .then(res => res.ok ? res.json() : Promise.reject(new Error(res.status)))
+                .then(data => {
+                    let allOnline = true;
+                    for (const topic in data) {
+                        if ((topic === 'robot' || topic === 'navigation' || topic === 'lidar') && !data[topic]) {
+                            allOnline = false;
+                        }
+                        const indicator = document.getElementById(`status-${topic}`);
+                        if (indicator) {
+                            indicator.classList.remove('ok', 'not-ok');
+                            if (data[topic]) indicator.classList.add('ok');
+                            else indicator.classList.add('not-ok');
+                        }
+                    }
+                    handleOverlayState(allOnline);
+                })
+                .catch(err => {
+                    handleOverlayState(false);
+                    const topics = ['robot', 'navigation', 'lidar'];
+                    topics.forEach(topic => {
+                        const indicator = document.getElementById(`status-${topic}`);
+                        if (indicator) {
+                            indicator.classList.remove('ok');
+                            indicator.classList.add('not-ok');
+                        }
+                    });
+                });
+        }
+
+        function restartSystem() {
+            if (confirm("Are you sure you want to reboot the robot?")) {
+                fetch(BASE_URL + "/restart", { method: "POST" })
+                    .then(res => res.json())
+                    .then(data => log(`Restarting...`))
+                    .catch(error => log(`Restart command failed.`));
+            }
+        }
+
+        function shutdownSystem() {
+            if (confirm("Are you sure you want to SHUTDOWN the robot?")) {
+                fetch(BASE_URL + "/shutdown", { method: "POST" })
+                    .then(res => res.json())
+                    .then(data => log(`Shutting down...`))
+                    .catch(error => log(`Shutdown command failed.`));
+            }
+        }
+
+        function cancelGoal() {
+            log('❌ Cancelling current navigation goal...');
+            fetch(BASE_URL + "/cancel_goal", { method: "POST" })
+                .then(res => res.json())
+                .then(data => {
+                    log(`Goal cancelled: ${data.status}`);
+                    currentRobotPosition = null;
+                })
+                .catch(error => log(`Cancel goal failed: ${error.message}`));
+        }
+
+        function showPinModal() {
+            currentPin = "";
+            document.getElementById("pinInput").value = "";
+            document.getElementById("pinModal").style.display = "flex";
+        }
+
+        function closePinModal() {
+            document.getElementById("pinModal").style.display = "none";
+            currentPin = "";
+            document.getElementById("pinInput").value = "";
+        }
+
+        function pressKey(val) {
+            if (val === "clear") {
+                currentPin = "";
+            } else if (val === "ok") {
+                if (currentPin === correctPin) {
+                    closePinModal();
+                    joystickUnlocked = true;
+                    log("Auth OK: Manual control Unlocked.");
+                } else {
+                    alert("Invalid PIN.");
+                    currentPin = "";
+                }
+            } else {
+                if (currentPin.length < 6) currentPin += val;
+            }
+            document.getElementById("pinInput").value = "*".repeat(currentPin.length);
+        }
+
+        setInterval(updateBattery, 1000);
+        setInterval(updateTopicHealth, 1500);
+
+
+
+        const startupQuotes = [
+            "Paving the Shared Memory highway... 🏎️",
+            "Synchronizing Lidar pulses with the heartbeat of the factory...",
+            "Aligning the TF tree. Ensuring the past doesn't haunt the future...",
+            "Negotiating with Cyclone DDS for peak performance...",
+            "Mapping the world, one laser pulse at a time...",
+            "Waking up the System. Ready to roll."
+        ];
+
+        const amrRules = [
+            "Maintain 1-meter clearance. I can see you, but physics still applies.",
+            "A clean floor is a happy map. Keep the path clear of debris.",
+            "Check the Lidar glass. A smudge to you is a wall to me.",
+            "Battery is my lifeblood. Dock me at 20%, don't let me faint.",
+            "Respect the exclusion zones. I am programmed to avoid, not to argue."
+        ];
+
+        let startupIndex = 0;
+        let ruleIndex = 0;
+
+        let systemsOnline = false;
+        let overlayMinTimerDone = false;
+        let quoteInterval = null;
+
+        // Enforce a minimum 4-second loading screen so quotes can be read
+        setTimeout(() => {
+            overlayMinTimerDone = true;
+            if (systemsOnline) {
+                hideOverlay();
+            } else {
+                showOverlay("SYSTEMS OFFLINE", "var(--accent-orange)");
+            }
+        }, 4000);
+
+        function startRollingQuotes() {
+            const textEl = document.getElementById("startupText");
+            if (!quoteInterval) {
+                textEl.innerText = startupQuotes[startupIndex];
+                quoteInterval = setInterval(() => {
+                    startupIndex = (startupIndex + 1) % startupQuotes.length;
+                    textEl.innerText = startupQuotes[startupIndex];
+                }, 1500);
+            }
+        }
+
+        function stopRollingQuotes() {
+            if (quoteInterval) {
+                clearInterval(quoteInterval);
+                quoteInterval = null;
+            }
+        }
+
+        function hideOverlay() {
+            const overlay = document.getElementById("startupOverlay");
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                stopRollingQuotes();
+                log("System Dashboard Online.");
+            }, 1000);
+        }
+
+        function showOverlay(titleText, color) {
+            const overlay = document.getElementById("startupOverlay");
+            const title = overlay.querySelector('.startup-logo');
+            title.innerText = titleText;
+            title.style.color = color;
+            title.style.textShadow = `0 0 20px ${color}`;
+
+            overlay.style.display = 'flex';
+            setTimeout(() => overlay.style.opacity = '1', 50);
+            startRollingQuotes();
+        }
+
+        function handleOverlayState(isOnline) {
+            systemsOnline = isOnline;
+            const overlay = document.getElementById("startupOverlay");
+
+            if (isOnline) {
+                if (overlayMinTimerDone && overlay.style.display !== 'none' && overlay.style.opacity !== '0') {
+                    hideOverlay();
+                }
+            } else {
+                if (overlayMinTimerDone) {
+                    const title = overlay.querySelector('.startup-logo');
+                    if (overlay.style.display === 'none' || overlay.style.opacity === '0' || title.innerText !== "SYSTEMS OFFLINE") {
+                        showOverlay("SYSTEMS OFFLINE", "var(--accent-orange)");
+                    }
+                }
+            }
+        }
+
+        function cycleRules() {
+            const ruleBox = document.getElementById("rule-box");
+            setInterval(() => {
+                ruleBox.style.opacity = '0';
+                setTimeout(() => {
+                    ruleBox.innerText = amrRules[ruleIndex];
+                    ruleBox.style.opacity = '1';
+                    ruleIndex = (ruleIndex + 1) % amrRules.length;
+                }, 500);
+            }, 8000);
+        }
+
+        window.onload = () => {
+            const overlayTitle = document.querySelector('#startupOverlay .startup-logo');
+            overlayTitle.innerText = "AMR SYSTEM BOOT";
+            overlayTitle.style.color = "var(--accent-blue)";
+            overlayTitle.style.textShadow = "0 0 20px rgba(59, 130, 246, 0.8)";
+            startRollingQuotes();
+
+            document.getElementById("rule-box").innerText = amrRules[0];
+            ruleIndex = 1;
+            cycleRules();
+
+            updateBattery();
+            updateTopicHealth();
+        };
+
+        // ===== SAFETY STATUS POLLING =====
+        let prevJoystickOverride = false;
+        let prevObstacleDetected = false;
+        let prevIsLost = false;
+
+        function updateSafetyStatus() {
+            fetch(`${BASE_URL}/safety_status`)
+                .then(res => res.ok ? res.json() : Promise.reject(new Error(res.status)))
+                .then(data => {
+                    const joystickPopup = document.getElementById('joystickOverridePopup');
+                    const obstaclePopup = document.getElementById('obstaclePopup');
+                    const obstacleContent = document.getElementById('obstacleContent');
+                    const warningState = document.getElementById('obstacleWarningState');
+                    const lostState = document.getElementById('obstacleLostState');
+                    const obstacleTimer = document.getElementById('obstacleTimer');
+
+                    // --- Joystick Override ---
+                    if (data.joystick_override) {
+                        joystickPopup.style.display = 'flex';
+                        if (!prevJoystickOverride) {
+                            log('⚠️ JOYSTICK OVERRIDE ACTIVE');
+                        }
+                    } else {
+                        joystickPopup.style.display = 'none';
+                        if (prevJoystickOverride) {
+                            log('✅ Joystick override ended');
+                        }
+                    }
+                    prevJoystickOverride = data.joystick_override;
+
+                    // --- Obstacle Detection ---
+                    if (data.obstacle_detected) {
+                        obstaclePopup.style.display = 'flex';
+                        const isLost = data.obstacle_duration >= 60;
+
+                        if (isLost) {
+                            // Switch to lost state
+                            obstacleContent.classList.remove('warning-state');
+                            obstacleContent.classList.add('lost-state');
+                            warningState.style.display = 'none';
+                            lostState.style.display = 'block';
+                            if (!prevIsLost) {
+                                log('🤖💫 ROBOT IS LOST — stuck for over 60 seconds!');
+                            }
+                            prevIsLost = true;
+                        } else {
+                            // Warning state
+                            obstacleContent.classList.remove('lost-state');
+                            obstacleContent.classList.add('warning-state');
+                            warningState.style.display = 'block';
+                            lostState.style.display = 'none';
+                            obstacleTimer.textContent = `Obstacle detected for ${data.obstacle_duration}s`;
+                            if (!prevObstacleDetected) {
+                                log('🚧 OBSTACLE DETECTED — path blocked!');
+                            }
+                            prevIsLost = false;
+                        }
+                    } else {
+                        obstaclePopup.style.display = 'none';
+                        if (prevObstacleDetected) {
+                            log('✅ Obstacle cleared — path is free');
+                            // Reset states
+                            obstacleContent.classList.remove('lost-state');
+                            obstacleContent.classList.add('warning-state');
+                            warningState.style.display = 'block';
+                            lostState.style.display = 'none';
+                        }
+                        prevIsLost = false;
+                    }
+                    prevObstacleDetected = data.obstacle_detected;
+                })
+                .catch(err => console.log(`Safety status fetch failed: ${err.message}`));
+        }
+
+        setInterval(updateSafetyStatus, 1000);
+    </script>
+</body>
+
+</html>
