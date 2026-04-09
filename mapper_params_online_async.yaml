@@ -1,0 +1,73 @@
+slam_toolbox:
+  ros__parameters:
+
+    # --- Solver Parameters (Ceres is best for Jetson/Humble) ---
+    solver_plugin: solver_plugins::CeresSolver
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
+    ceres_preconditioner: SCHUR_JACOBI
+    ceres_trust_strategy: LEVENBERG_MARQUARDT
+    ceres_dogleg_type: TRADITIONAL_DOGLEG
+    ceres_loss_function: None
+
+    # --- ROS Parameters ---
+    odom_frame: odom
+    map_frame: map
+    base_frame: base_link        # Changed from footprint to match your EKF base_link
+    scan_topic: /scan
+    mode: mapping  #localization                # Mapping mode for your Master Map run
+
+    #map_file_name: /home/jetson/slam_ws/warnish_ser1
+    #map_start_at_dock: true
+
+    # --- Matcher & Precision Parameters ---
+    resolution: 0.05             # 5cm is the industry standard for balanced CPU/Detail
+    max_laser_range: 25.0        # RPLidar S2E is stable at 25m
+    min_laser_range: 0.2         # Match your physical Lidar minimum to avoid "ghosts"
+    minimum_time_interval: 0.1
+    transform_timeout: 0.2
+    tf_buffer_duration: 30.0
+    stack_size_to_use: 40000000  # Fixed: Program needs this for large factory serialization
+    enable_interactive_mode: true
+
+    # --- General Mapping Parameters (Tuned for Clutter) ---
+    use_scan_matching: true
+    use_scan_barycenter: true
+    minimum_travel_distance: 0.1    # High frequency updates for fine machine details
+    minimum_travel_heading: 0.05    # ~3 degrees
+    
+    # "The Buffer": Larger buffer helps average out moving people
+    scan_buffer_size: 30            
+    scan_buffer_maximum_scan_distance: 10.0
+    
+    # "The Grip": Increased to 4.0m to bridge gaps in wide factory aisles
+    link_scan_maximum_distance: 4.0  
+    link_match_minimum_response_fine: 0.1  
+
+    # --- Loop Closure (Essential for Large Areas) ---
+    do_loop_closing: true
+    loop_search_maximum_distance: 5.0  # Increased for large factory spaces
+    loop_match_minimum_chain_size: 10
+    loop_match_maximum_variance_coarse: 3.0  
+    loop_match_minimum_response_coarse: 0.30 # More aggressive to snap map together
+    loop_match_minimum_response_fine: 0.45
+
+    # --- Correlation & Search Parameters ---
+    correlation_search_space_dimension: 0.5
+    correlation_search_space_resolution: 0.01
+    correlation_search_space_smear_deviation: 0.1 
+
+    # Loop Search space should be large for factory aisles
+    loop_search_space_dimension: 10.0
+    loop_search_space_resolution: 0.05
+    loop_search_space_smear_deviation: 0.03
+
+    # --- Scan Matcher Confidence ---
+    distance_variance_penalty: 0.5      
+    angle_variance_penalty: 1.0    
+
+    fine_search_angle_offset: 0.00349   
+    coarse_search_angle_offset: 0.349   
+    coarse_angle_resolution: 0.0349     
+    minimum_angle_penalty: 0.9
+    minimum_distance_penalty: 0.5
+    use_response_expansion: true
