@@ -1,0 +1,42 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+    # use_sim_time: true
+
+    diff_cont:
+      type: diff_drive_controller/DiffDriveController
+
+    joint_broad:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+
+diff_cont:
+  ros__parameters:
+    publish_rate: 50.0
+
+    base_frame_id: base_link
+    enable_odom_tf: false
+
+    left_wheel_names: ['left_wheel_joint']
+    right_wheel_names: ['right_wheel_joint']
+    wheel_separation: 0.548
+    wheel_radius: 0.05
+
+    use_stamped_velocities: false
+
+    # Enable velocity smoothing
+    linear.x.has_velocity_limits: true
+    linear.x.max_velocity: 0.40      # max forward speed (m/s)
+    linear.x.min_velocity: -0.40
+
+    linear.x.has_acceleration_limits: true
+    linear.x.max_acceleration: 0.08  # ramp-up (m/s²)
+    linear.x.min_acceleration: -0.08 # ramp-down (m/s²)
+
+    angular.z.has_velocity_limits: true
+    angular.z.max_velocity: 3.0     # max rotation (rad/s)
+    angular.z.min_velocity: -3.0
+
+    angular.z.has_acceleration_limits: true
+    angular.z.max_acceleration: 0.5 # ramp-up rotation
+    angular.z.min_acceleration: -0.5 # ramp-down rotation
